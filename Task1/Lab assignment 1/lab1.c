@@ -9,14 +9,16 @@ int main(int argc, char const *argv[]) {
   int pid = fork();
 
   int fd[2];
-
+  // Child
   if (pid == 0) {
     close(fd[0]);
 
     execl("ls", "ls", (char *)NULL);
     perror("execlp ls");
 
-  } else {
+  }
+  // Parent
+  else {
     close(fd[1]);
 
     execl("wc", "wc", "-l", (char *)NULL);
@@ -27,8 +29,6 @@ int main(int argc, char const *argv[]) {
     perror("Eror pipe\n");
     exit(1);
   }
-
-  int pid = fork();
 
   if (pid == -1) {
     perror("fork error\n");
