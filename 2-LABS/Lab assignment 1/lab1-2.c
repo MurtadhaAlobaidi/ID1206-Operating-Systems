@@ -5,7 +5,10 @@
 #include <stdio.h>  //input and output
 #include <stdlib.h> // library
 #include <string.h> //Size_t  and strlen
+#include <sys/ipc.h>
+#include <sys/msg.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 
 int read() {
   FILE *file;
