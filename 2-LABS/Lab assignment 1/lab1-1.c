@@ -18,10 +18,13 @@
  */
 
 int main(int argc, char const *argv[]) {
+
   // fd[0] read , fd[1]write
   int fd[2];
+  pipe(fd);
 
   int pid = fork();
+
   if (pid == -1) {
     perror("fork error\n");
     exit(1);
@@ -30,19 +33,18 @@ int main(int argc, char const *argv[]) {
   if (pid == 0) {
     close(fd[0]);
     // redirect the output of the exec to the input descriptor made by pipe
-    dup2(fd[1], 0);
+    dup2(fd[1], STDOUT_FILENO);
     close(fd[1]);
     /* Writes to pipe */
     execlp("ls", "ls", "/", (char *)NULL);
-    // perror("Passing to the parent process\n");
   } // Parent
   else {
     close(fd[1]);
-    dup2(fd[0], 0);
+    dup2(fd[0], STDIN_FILENO);
     close(fd[0]);
     /* Reads from pipe */
     execlp("wc", " wc", "-l", (char *)NULL);
+    wait(NULL);
   }
-  wait(NULL);
   return 0;
 }
