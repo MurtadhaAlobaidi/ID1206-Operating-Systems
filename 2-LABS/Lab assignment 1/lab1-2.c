@@ -11,7 +11,7 @@ int main(int argc, char const *argv[]) {
   char ch;
 
   // Opening file in reading mode
-  ptr = fopen("file.txt", "r");  
+  ptr = fopen("file.txt", "r");
 
   // Printing what is written in file
   // character by character using loop.

@@ -34,7 +34,7 @@ int main(int argc, char const *argv[]) {
     close(fd[1]);
     /* Writes to pipe */
     execlp("ls", "ls", "/", (char *)NULL);
-    //perror("Passing to the parent process\n");
+    // perror("Passing to the parent process\n");
   } // Parent
   else {
     close(fd[1]);
