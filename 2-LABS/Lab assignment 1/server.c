@@ -11,6 +11,8 @@
  * For your linux system, you can know all the details of the IPC mechanisms and
  *available queues
  * "ipcs -a"
+ * From
+ *https://stackoverflow.com/questions/3056307/how-do-i-use-mqueue-in-a-c-program-on-a-linux-based-system
  */
 void die(char *s) {
   perror(s);
