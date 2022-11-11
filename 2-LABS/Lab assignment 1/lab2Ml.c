@@ -1,16 +1,31 @@
-#include <dirent.h> //files
-#include <errno.h>  /* error handling */
-#include <fcntl.h>  // mq_open
-#include <fcntl.h>
+#include <dirent.h> /* Handling directory files */
+#include <errno.h>  /* EXIT codes and error handling */
+#include <fcntl.h>  /* Defines requests/arguments used by mq_open */
 #include <mqueue.h> /* Queue functions */
-#include <stdio.h>  //input and output
-#include <stdlib.h> // library
-#include <string.h> //Size_t  and strlen
-#include <sys/ipc.h>
-#include <sys/msg.h>
-#include <sys/stat.h>
-#include <sys/types.h>
+#include <stdio.h>  /* Basic input/output stream */
+#include <stdlib.h> /* Standard library */
+#include <string.h> /* Size_t, strlen */
 
+#define MAX_SIZE 100
+#define MAX_NUM_MSG 10
+
+/**************************************************************************************
+In this part, you will work with message queues. You need to implement two
+processes, such that the first process reads the content of a text file and
+passes it to the second process through a message queue. Upon receipt of the
+file content, the second process should count and print out the number of words
+in the file.
+***************************************************************************************/
+
+/**
+ * @brief a function that scans the input of a file and then process the content
+ * and sends it via a queue.
+ *
+ * @param attributes the attributes for the queue
+ * @param mqd message queue descriptor
+ * @param my_mq the name of the queue
+ * @return int
+ */
 int sender_process(struct mq_attr attributes, mqd_t mqd, char *my_mq) {
 
   FILE *fp = fopen("text.txt", "r");
