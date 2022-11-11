@@ -1,0 +1,4 @@
+{
+  "cpptest.compilerIdentifier": "gcc_8-64",
+  "cpptest.testConfiguration": "builtin://Flow Analysis Standard"
+}

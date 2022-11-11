@@ -12,7 +12,7 @@
 
 int read() {
   FILE *file;
-  file = fopen("file.txt", "r");
+  file = fopen("text.txt", "r");
   char r;
   while (!feof(file)) {
     r = fgetc(file);
