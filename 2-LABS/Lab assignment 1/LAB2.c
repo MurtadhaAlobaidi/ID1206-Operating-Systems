@@ -91,9 +91,10 @@ int main(int argc, char const *argv[])
 }
 
 int print(){
+  int x;
     for(int i = 0;buf_rec[i]; i++)
     {
-        int x;
+        
         if (buf_rec[i] == 20) {
             x++;
         }
@@ -102,6 +103,6 @@ int print(){
         }
     }
     printf("Your message is: %s\n", buf_rec);
-    printf("The wordes you have in the file is %d\n" , "[",x ,"]" );
+    printf("The wordes you have in the file is%d\n" , "[", x ,"]" );
     return 0;
 }
