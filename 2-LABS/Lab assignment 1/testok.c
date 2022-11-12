@@ -1,12 +1,10 @@
-#include <dirent.h>
-#include <errno.h>
-#include <fcntl.h>
 #include <mqueue.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define MAX_SIZE 100
-#define MAX_NUM_MSG 10
+
+int MAX_SIZE = 100;
+int MAX_NUM_MSG = 10;
 
 char *buf, *buf_rec;
 /*
@@ -16,10 +14,10 @@ char *buf, *buf_rec;
 int mq_sender(struct mq_attr attr, mqd_t mqd, char *my_mq) {
 
   // Open an existing message queue
-  mqd = mq_open(my_mq, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR, &attr);
+  mqd = mq_open(my_mq, O_WRONLY, &attr);
 
   // Write from "file" to the message queue
-  mq_send(mqd, buf, strlen(buf), 1);
+  mq_send(mqd, buf, strlen(buf), 0);
 
   // Close the message queue
   mq_close(mqd);
@@ -33,10 +31,10 @@ int mq_sender(struct mq_attr attr, mqd_t mqd, char *my_mq) {
 int mq_receiveer(struct mq_attr attr, mqd_t mqd, char *my_mq) {
 
   // Create message queue
-  mqd = mq_open(my_mq, O_RDONLY | O_CREAT, S_IRUSR | S_IWUSR, &attr);
+  mqd = mq_open(my_mq, O_RDONLY | O_CREAT, &attr);
 
   // Read the message from the message queue
-  mq_receive(mqd, buf_rec, MAX_SIZE, NULL);
+  mq_receive(mqd, buf_rec, MAX_NUM_MSG, NULL);
   // printf("Message: %s\n", buf);
 
   // Close the message queue
@@ -75,19 +73,23 @@ void read() {
   buf_rec = (char *)malloc(sizeof(char) * MAX_SIZE);
 }
 
-void print() {
-  int i, x = 0;
-  for (i = 0; buf_rec[i]; i++) {
-    if (buf_rec[i] == MAX_SIZE) {
-      x++;
+void wordes_counter() {
+  int nummber_of_worde = 0;
+
+  for (int i = 0; i < MAX_SIZE; i++) {
+    // printf("tecken: %d\n", buf_rec[i]);
+    if (buf_rec[i] == 32) {
+      nummber_of_worde++;
     }
-  }
-  if (i > 0) {
-    x++;
+
+    if (buf_rec[i] == 10) {
+      nummber_of_worde++;
+      break;
+    }
   }
 
   printf("Your words is: %s\n", buf_rec);
-  printf("The number of words is = %d\n", x);
+  printf("The number of words is = %d\n", nummber_of_worde);
   printf("\n");
 }
 
@@ -112,5 +114,5 @@ int main() {
 
   message_queues(); // biuld the message_queues /
 
-  print();
+  wordes_counter();
 }
