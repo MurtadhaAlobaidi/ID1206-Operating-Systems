@@ -5,9 +5,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-int MAX_SIZE = 100;
-int MAX_NUM_MSG = 10;
+#define MAX_SIZE 100
+#define MAX_NUM_MSG 10
 
 char *buf, *buf_rec;
 /*
@@ -49,10 +48,8 @@ int mq_receiveer(struct mq_attr attr, mqd_t mqd, char *my_mq) {
 }
 
 void read() {
-
-  FILE *file = fopen("text.txt", "r");
-  // char filename[] = "text.txt";
-  //  file = fopen(filename, "r");
+  FILE *file;
+  file = fopen("text.txt", "r");
   /* malloc() method inspiration from
    *"https://www.tutorialspoint.com/c_standard_library/c_function_malloc.htm"
    * The “malloc” or “memory allocation”
@@ -62,13 +59,16 @@ void read() {
    *cast into a pointer of any form
    * */
   buf = (char *)malloc(sizeof(char) * MAX_SIZE);
-  int checker;
   size_t s = 0;
-  while ((checker = fgetc(file) != -1)) {
-    //printf("%c\n", checker);
-    buf[s++] = checker;
-  }
+  int r;
 
+  if (!file) {
+    perror("Error file not open ");
+    exit(1);
+  }
+  while ((r = fgetc(file)) != EOF) {
+    buf[s++] = r;
+  }
   fclose(file);
   /*
    * malloc() method inspiration from
@@ -78,11 +78,9 @@ void read() {
 }
 
 void print() {
-
   int i, x = 0;
-
   for (i = 0; buf_rec[i]; i++) {
-    if (buf_rec[i] == 32) {
+    if (buf_rec[i] == MAX_SIZE) {
       x++;
     }
   }
@@ -96,7 +94,8 @@ void print() {
 }
 
 void message_queues() {
-  char *my_mq = "/mymq"; /* queue name */
+
+  char *my_mq = "/mymq"; // queue name
   mqd_t mqd;             // message queue
 
   struct mq_attr attr;          /* queue attributes */
@@ -111,9 +110,9 @@ void message_queues() {
 
 int main() {
 
-  read(); /*read from the file*/
+  read(); // read from the file /
 
-  message_queues(); /*biuld the message_queues*/
+  message_queues(); // biuld the message_queues /
 
   print();
 }
