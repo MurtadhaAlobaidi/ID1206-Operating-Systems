@@ -1,51 +1,22 @@
-#include <mqueue.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <dirent.h> /* Handling directory files */
+#include <errno.h>  /* EXIT codes and error handling */
+#include <fcntl.h>  /* Defines requests/arguments used by mq_open */
+#include <mqueue.h> /* Queue functions */
+#include <stdio.h>  /* Basic input/output stream */
+#include <stdlib.h> /* Standard library */
+#include <string.h> /* Size_t, strlen */
 
 int MAX_SIZE = 100;
 int MAX_NUM_MSG = 10;
 
-char *buf, *buf_rec;
 /*
  * @mq_sender From our course lecture 02 "Message Queue"
  * @mq_receiveer From our course lecture 02 "Message Queue"
  * */
 int mq_sender(struct mq_attr attr, mqd_t mqd, char *my_mq) {
 
-  // Open an existing message queue
-  mqd = mq_open(my_mq, O_WRONLY, &attr);
+  char *buf;
 
-  // Write from "file" to the message queue
-  mq_send(mqd, buf, strlen(buf), 0);
-
-  // Close the message queue
-  mq_close(mqd);
-
-  /* free allocated memory */
-  free(buf);
-
-  return 0;
-}
-
-int mq_receiveer(struct mq_attr attr, mqd_t mqd, char *my_mq) {
-
-  // Create message queue
-  mqd = mq_open(my_mq, O_RDONLY | O_CREAT, &attr);
-
-  // Read the message from the message queue
-  mq_receive(mqd, buf_rec, MAX_NUM_MSG, NULL);
-  // printf("Message: %s\n", buf);
-
-  // Close the message queue
-  mq_close(mqd);
-  // removes the message queue identified by name.
-  mq_unlink(my_mq);
-
-  return 0;
-}
-
-void read() {
   FILE *file;
   char filename[] = "text.txt";
   file = fopen(filename, "r");
@@ -66,14 +37,44 @@ void read() {
     buf[s++] = checker;
   }
   fclose(file);
+
+  // printf("%stest: \n", buf);
+
+  // Open an existing message queue
+  mqd = mq_open(my_mq, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR, &attr);
+
+  // Write from "file" to the message queue
+  mq_send(mqd, buf, strlen(buf), 0);
+
+  // Close the message queue
+  mq_close(mqd);
+
+  /* free allocated memory */
+  free(buf);
+
+  return 0;
+}
+
+int mq_receiveer(struct mq_attr attr, mqd_t mqd, char *my_mq) {
+  char *buf_rec;
   /*
    * malloc() method inspiration from
    *"https://www.tutorialspoint.com/c_standard_library/c_function_malloc.htm"
    * */
   buf_rec = (char *)malloc(sizeof(char) * MAX_SIZE);
-}
 
-void wordes_counter() {
+  // Create message queue
+  mqd = mq_open(my_mq, O_RDONLY | O_CREAT, S_IRUSR | S_IWUSR, &attr);
+
+  // Read the message from the message queue
+  mq_receive(mqd, buf_rec, MAX_SIZE, NULL);
+  // printf("Message: %s\n", buf);
+
+  // Close the message queue
+  mq_close(mqd);
+  // removes the message queue identified by name.
+  mq_unlink(my_mq);
+
   int nummber_of_worde = 0;
 
   for (int i = 0; i < MAX_SIZE; i++) {
@@ -87,10 +88,10 @@ void wordes_counter() {
       break;
     }
   }
-
   printf("Your words is: %s\n", buf_rec);
   printf("The number of words is = %d\n", nummber_of_worde);
   printf("\n");
+  return 0;
 }
 
 void message_queues() {
@@ -110,9 +111,5 @@ void message_queues() {
 
 int main() {
 
-  read(); // read from the file /
-
   message_queues(); // biuld the message_queues /
-
-  wordes_counter();
 }
