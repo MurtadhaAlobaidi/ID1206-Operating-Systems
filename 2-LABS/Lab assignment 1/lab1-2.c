@@ -10,7 +10,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-int read() {
+void read() {
   FILE *file;
   file = fopen("text.txt", "r");
   char r;
@@ -19,13 +19,14 @@ int read() {
     printf("%c", r);
   }
   fclose(file);
-
-  return r;
 }
 
 // int write() {}
 
 int main(int argc, char const *argv[]) {
+
   read();
+  printf("This in the file \n");
+
   return 0;
 }
