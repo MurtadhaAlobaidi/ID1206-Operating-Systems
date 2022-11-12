@@ -5,13 +5,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define MAX_SIZE 100
-#define MAX_NUM_MSG 10
 
-// struct read{
-// char *buf = [MAX_SIZE)];
-
-// }
+int MAX_SIZE = 100;
+int MAX_NUM_MSG = 10;
 
 char *buf, *buf_rec;
 /*
@@ -71,7 +67,7 @@ void read() {
     perror("Error file not open ");
     exit(1);
   }
-  while ((r = fgetc(file)) != EOF) {
+  while ((r = fgetc(file)) != -1) {
     buf[s++] = r;
   }
   fclose(file);
