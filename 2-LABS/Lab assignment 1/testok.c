@@ -49,7 +49,9 @@ int mq_receiveer(struct mq_attr attr, mqd_t mqd, char *my_mq) {
 
 void read() {
   FILE *file;
-  file = fopen("text.txt", "r");
+  char filename[] = "text.txt";
+  file = fopen(filename, "r");
+
   /* malloc() method inspiration from
    *"https://www.tutorialspoint.com/c_standard_library/c_function_malloc.htm"
    * The “malloc” or “memory allocation”
@@ -60,14 +62,10 @@ void read() {
    * */
   buf = (char *)malloc(sizeof(char) * MAX_SIZE);
   size_t s = 0;
-  int r;
+  int checker;
 
-  if (!file) {
-    perror("Error file not open ");
-    exit(1);
-  }
-  while ((r = fgetc(file)) != EOF) {
-    buf[s++] = r;
+  while ((checker = fgetc(file)) != EOF) {
+    buf[s++] = checker;
   }
   fclose(file);
   /*
