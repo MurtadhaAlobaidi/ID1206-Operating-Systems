@@ -21,8 +21,8 @@ void *thread_func(void *arg) {
   while (buffer < 15) {
 
     (*buf)++, buffer++, pthread_mutex_unlock(&lock);
-    printf("TID: %d\t PID: %d\t Buffer: %d\n", (int)(intptr_t)pthread_self(),
-           getpid(), buffer);
+    printf("TID: %d\t PID: %d\t Buffer: %d\n", (int)pthread_self(), getpid(),
+           buffer);
   }
 
   pthread_mutex_unlock(&lock);
@@ -39,10 +39,10 @@ int main(void) {
     pthread_create(&threads123[i++], NULL, thread_func, NULL);
   }
   /* inspiration from
-   * https://stackoverflow.com/questions/21396995/pthread-joinwarning-cast-from-pointer-to-integer-of-different-size
+   * https://stackoverflow.com/questions/62752275/pthread-join-and-void-error-understanding
    * */
-  for (int i = 0, *mod; i < 3; printf("TID %d worked on the buffer %d times\n",
-                                      (int)(intptr_t)threads123[i++], *mod)) {
+  for (int i = 0, *mod; i < 3; printf("TID %d worked on the buffer %d times\n ",
+                                      (int)threads123[i++], *mod)) {
     pthread_join(threads123[i], (void **)&mod);
   }
 
