@@ -60,10 +60,10 @@ int SSTF() {
  * We move from #Zero to #max value
  * */
 int SCAN() {
+  int pointer = head;
+
   int steps = 0;
-  int maxToMin[8];
   int maxToMinIndex = 0;
-  int minToMax[8];
   int minToMaxIndex = 0;
 
   int max = -5000;
@@ -71,18 +71,36 @@ int SCAN() {
   int index = 0;
   for (int i = 0; i < 8; i++) {
     max = series[i];
-    for (int j = 0; j < 8; j++) {
+    if (series[i] <= head) {
+      minToMaxIndex++;
+    } else {
+      maxToMinIndex++;
+    }
+
+    for (int j = i + 1; j < 8; j++) {
       if (series[j] >= max) {
-        //max = series[j];
+        max = series[j];
         index = j;
       }
     }
     int x = series[i];
     series[i] = series[index];
-    series[index]=x;
+    series[index] = x;
   }
 
-  for (int i = 0; i <8; i++) {
+  for (int i = 0; i < 8; i++) {
+    printf("%d\n", series[i]);
+  }
+
+  // printf("%d\n", minToMaxIndex);// 6
+  printf("\n"); // 2
+
+  for (int i = 8 - 1; i >= minToMaxIndex; i--) {
+    printf("%d\n", series[i]);
+  }
+  printf("\n");
+
+  for (int i = minToMaxIndex - 1; i >= 0; i--) {
     printf("%d\n", series[i]);
   }
 
