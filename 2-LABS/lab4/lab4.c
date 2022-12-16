@@ -1,0 +1,112 @@
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int cylinder[5000];
+int series[] = {98, 183, 37, 122, 14, 124, 65, 67};
+int head = 53;
+
+/**
+ * @FCFS We take th #head as input from the Cylinder rang and
+ * wi will go through all the #queue
+ * And we calculate the sam of all the steps (Total head movement cylinders) */
+int FCFS() {
+  int steps = 0;
+  int pointer = head;
+  for (int i = 0; i < 8; i++) {
+
+    steps += abs(pointer - series[i]);
+
+    pointer = series[i];
+  }
+  return steps;
+}
+/**
+@SSTF We take the #head as input from the Cylinder rang and
+ * we will compere to the all value and first move to the value that have
+ * min steps to #head   */
+int SSTF() {
+  int visted[8];
+  int steps = 0;
+  int pointer = head;
+  for (int i = 0; i < 8; i++) {
+    visted[i] = 0;
+  }
+
+  int min = 5000;
+  int index = 0;
+  for (int i = 0; i < 8; i++) {
+
+    for (int j = 0; j < 8; j++) {
+      if (visted[j] != 1 && (abs(pointer - series[j]) < min)) {
+        min = abs(pointer - series[j]);
+        index = j;
+      }
+    }
+
+    steps += min;
+    pointer = series[index];
+    visted[index] = 1;
+    min = 5000;
+  }
+
+  return steps;
+}
+
+/*SCAN We take the #head as input from the Cylinder rang and
+ * Wi will compere #head with all value we have in the #queue
+ * first we go to the value that #min an the head and keep go to #Zero
+ * We move from #Zero to #max value
+ * */
+int SCAN() {
+  int steps = 0;
+  int maxToMin[8];
+  int maxToMinIndex = 0;
+  int minToMax[8];
+  int minToMaxIndex = 0;
+
+  int max = -5000;
+  int min = 5000;
+  int index = 0;
+  for (int i = 0; i < 8; i++) {
+    max = series[i];
+    for (int j = 0; j < 8; j++) {
+      if (series[j] >= max) {
+        //max = series[j];
+        index = j;
+      }
+    }
+    int x = series[i];
+    series[i] = series[index];
+    series[index]=x;
+  }
+
+  for (int i = 0; i <8; i++) {
+    printf("%d\n", series[i]);
+  }
+
+  return steps;
+}
+
+int main() {
+  /* FCFS */
+  int x = FCFS();
+  // printf("FCFS Total head movement: %d cylinder\n", x);
+
+  /* SSTF */
+  int x2 = SSTF();
+  // printf("SSTF Total head movement: %d cylinder\n", x2);
+
+  /* SCAN */
+  int x3 = SCAN();
+  // printf("SCAN Total head movement: %d cylinder\n", x3);
+
+  return 0;
+}
+
+void generateRequests() {
+  for (int i = 0; i < 1000; i++) {
+    // series[i] = rand() % 5000;
+  }
+}
