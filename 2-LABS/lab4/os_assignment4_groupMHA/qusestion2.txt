@@ -1,0 +1,37 @@
+*1*******
+What are the inode values of file1.txt and file2.txt? 
+Are they the same or different? 
+Do the two files have the same - or different - contents?
+******Answer*******
+The inode values of file1.txt 1452414 and file2.txt is same value
+Yes, the have the same inode values
+*2******
+Next, edit file2.txt and change its contents. 
+After you have done so, examine the contents of file1.txt. 
+Are the contents of file1.txt and file2.txt the same or different?
+******Answer*******
+Yes the contents is the same.
+*3******
+Next removes file1.txt and does file2.txt still exist as well?
+******Answer*******
+Yes, file2.txt still exists.
+*4******
+The strace command traces the execution of system calls as the command rm file2.txt is run. 
+What system call is used for removing file2.txt?
+******Answer*******
+unlinkat(AT_FDCWD, "file2.txt")
+*5******
+Are the inodes the same, or is each unique?
+Next, edit the contents of file4.txt. 
+Have the contents of file3.txt been altered as well? Last, delete file3.txt. 
+After you have done so, explain what happens when you attempt to edit file4.txt.
+******Answer*******
+we creating first a soft link to file3.txt and the output is:
+1452414 file4.txt -> file3.txt
+
+then we creating a soft link to file4.txt and the output is:
+file3.txt 1452415
+file4.txt 1452414
+
+We removing file3.txt and change file4.txt. We recreate file3.txt as empty files.  
+*************
