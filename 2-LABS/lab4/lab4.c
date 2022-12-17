@@ -3,9 +3,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+/*
+ * LAB 4*/
 int cylinder[5000];
-int series[] = {98, 183, 37, 122, 14, 124, 65, 67};
-int head = 53;
+int series[1000];
+int head;
 
 /**
  * @FCFS We take th #head as input from the Cylinder rang and
@@ -23,9 +25,7 @@ int FCFS() {
   return steps;
 }
 /**
-@SSTF We take the #head as input from the Cylinder rang and
- * we will compere to the all value and first move to the value that have
- * min steps to #head   */
+@SSTF the #head as input from argument */
 int SSTF() {
   int visted[8];
   int steps = 0;
@@ -54,10 +54,7 @@ int SSTF() {
   return steps;
 }
 
-/*SCAN We take the #head as input from the Cylinder rang and
- * Wi will compere #head with all value we have in the #queue
- * first we go to the value that #min an the head and keep go to #Zero
- * We move from #Zero to #max value
+/*SCAN the #head as input from argument
  * */
 int SCAN() {
   int pointer = head;
@@ -88,43 +85,186 @@ int SCAN() {
     series[index] = x;
   }
 
-  for (int i = 0; i < 8; i++) {
-    printf("%d\n", series[i]);
-  }
-
-  // printf("%d\n", minToMaxIndex);// 6
-  printf("\n"); // 2
-
   for (int i = 8 - 1; i >= minToMaxIndex; i--) {
-    printf("%d\n", series[i]);
+    steps += abs(pointer - series[i]);
+    pointer = series[i];
   }
-  printf("\n");
+  steps += abs(pointer - 0);
+  pointer = 0;
+  for (int i = minToMaxIndex - 1; i >= 0; i--) {
+    steps += abs(pointer - series[i]);
+    pointer = series[i];
+  }
+
+  return steps;
+}
+/*C-SCAN the #head as input from argument*/
+int CSCAN() {
+  int pointer = head;
+
+  int steps = 0;
+  int maxToMinIndex = 0;
+  int minToMaxIndex = 0;
+
+  int max = -5000;
+  int min = 5000;
+  int index = 0;
+  for (int i = 0; i < 8; i++) {
+    max = series[i];
+    if (series[i] <= head) {
+      minToMaxIndex++;
+    } else {
+      maxToMinIndex++;
+    }
+
+    for (int j = i + 1; j < 8; j++) {
+      if (series[j] >= max) {
+        max = series[j];
+        index = j;
+      }
+    }
+    int x = series[i];
+    series[i] = series[index];
+    series[index] = x;
+  }
 
   for (int i = minToMaxIndex - 1; i >= 0; i--) {
-    printf("%d\n", series[i]);
+    steps += abs(pointer - series[i]);
+    pointer = series[i];
+  }
+
+  steps += abs(pointer - 199);
+  pointer = 199;
+
+  steps += abs(pointer - 0);
+  pointer = 0;
+  for (int i = minToMaxIndex; i < 8; i++) {
+    steps += abs(pointer - series[i]);
+    pointer = series[i];
+  }
+
+  return steps;
+}
+/*LOOK the #head as input from argument*/
+int LOOK() {
+  int pointer = head;
+
+  int steps = 0;
+  int maxToMinIndex = 0;
+  int minToMaxIndex = 0;
+
+  int max = -5000;
+  int min = 5000;
+  int index = 0;
+  for (int i = 0; i < 8; i++) {
+    max = series[i];
+    if (series[i] <= head) {
+      minToMaxIndex++;
+    } else {
+      maxToMinIndex++;
+    }
+
+    for (int j = i + 1; j < 8; j++) {
+      if (series[j] >= max) {
+        max = series[j];
+        index = j;
+      }
+    }
+    int x = series[i];
+    series[i] = series[index];
+    series[index] = x;
+  }
+
+  for (int i = 8 - 1; i >= minToMaxIndex; i--) {
+    steps += abs(pointer - series[i]);
+    pointer = series[i];
+  }
+  for (int i = minToMaxIndex - 1; i >= 0; i--) {
+    steps += abs(pointer - series[i]);
+    pointer = series[i];
+  }
+
+  return steps;
+}
+/*C-LOOK the #head as input from argument*/
+int CLOOK() {
+
+  int pointer = head;
+
+  int steps = 0;
+  int maxToMinIndex = 0;
+  int minToMaxIndex = 0;
+
+  int max = -5000;
+  int min = 5000;
+  int index = 0;
+  for (int i = 0; i < 8; i++) {
+    max = series[i];
+    if (series[i] <= head) {
+      minToMaxIndex++;
+    } else {
+      maxToMinIndex++;
+    }
+
+    for (int j = i + 1; j < 8; j++) {
+      if (series[j] >= max) {
+        max = series[j];
+        index = j;
+      }
+    }
+    int x = series[i];
+    series[i] = series[index];
+    series[index] = x;
+  }
+
+  for (int i = minToMaxIndex - 1; i >= 0; i--) {
+    steps += abs(pointer - series[i]);
+    pointer = series[i];
+  }
+
+  for (int i = minToMaxIndex; i < 8; i++) {
+    steps += abs(pointer - series[i]);
+    pointer = series[i];
   }
 
   return steps;
 }
 
-int main() {
+int main(int argc, char *argv[]) {
+
+  if (argc < 2) {
+    printf("There are no argument.\n");
+    return 0;
+  }
+
+  head = atoi(argv[1]);
+  for (int i = 0; i < 1000; i++) {
+    series[i] = rand() % 5000;
+  }
+
   /* FCFS */
   int x = FCFS();
-  // printf("FCFS Total head movement: %d cylinder\n", x);
+  printf("FCFS Total head movement: %d cylinder\n", x);
 
   /* SSTF */
   int x2 = SSTF();
-  // printf("SSTF Total head movement: %d cylinder\n", x2);
+  printf("SSTF Total head movement: %d cylinder\n", x2);
 
   /* SCAN */
   int x3 = SCAN();
-  // printf("SCAN Total head movement: %d cylinder\n", x3);
+  printf("SCAN Total head movement: %d cylinder\n", x3);
+
+  /*C-SCAN*/
+  int x4 = CSCAN();
+  printf("CSCAN Total head movement: %d cylinder\n", x4);
+
+  /*LOOK*/
+  int x5 = LOOK();
+  printf("LOOK Total head movement: %d cylinder\n", x5);
+
+  /*C-LOOK*/
+  int x6 = CLOOK();
+  printf("C-LOOK Total head movement: %d cylinder\n", x6);
 
   return 0;
-}
-
-void generateRequests() {
-  for (int i = 0; i < 1000; i++) {
-    // series[i] = rand() % 5000;
-  }
 }
